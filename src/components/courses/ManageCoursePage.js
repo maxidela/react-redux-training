@@ -5,6 +5,8 @@ import { loadAuthors } from "../../redux/actions/authorActions";
 import PropTypes from "prop-types";
 import CourseForm from "./CourseForm";
 import { newCourse } from "../../../tools/mockData";
+import Spinner from "../common/Spinner";
+import { toast } from "react-toastify";
 
 const ManageCoursePage = ({
   courses,
@@ -36,10 +38,6 @@ const ManageCoursePage = ({
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    // setCourse((prevCourse) => ({
-    //   ...prevCourse,
-    //   [name]: name === "authorId" ? parseInt(value, 10) : value,
-    // }));
     setCourse({
       ...course,
       [name]: name === "authorId" ? parseInt(value, 10) : value,
@@ -50,11 +48,14 @@ const ManageCoursePage = ({
     event.preventDefault();
     setSaving(true);
     saveCourse(course).then(() => {
+      toast.success("Course saved.");
       history.push("/courses");
     });
   };
 
-  return (
+  return authors.length === 0 || courses.length === 0 ? (
+    <Spinner />
+  ) : (
     <CourseForm
       authors={authors}
       course={course}
