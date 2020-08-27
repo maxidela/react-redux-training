@@ -15,6 +15,10 @@ export function createCourseSuccess(course) {
   return { type: types.CREATE_COURSE_SUCCESS, course };
 }
 
+export function deleteCourseOptimistic(course) {
+  return { type: types.DELETE_COURSE_OPTIMISTIC, course };
+}
+
 // Thunks
 export function loadCourses() {
   return function (dispatch) {
@@ -45,5 +49,12 @@ export const saveCourse = (course) => {
         dispatch(apiCallError(error));
         throw error;
       });
+  };
+};
+
+export const deleteCourse = (course) => {
+  return (dispatch) => {
+    dispatch(deleteCourseOptimistic(course));
+    return courseApi.deleteCourse(course.id);
   };
 };
